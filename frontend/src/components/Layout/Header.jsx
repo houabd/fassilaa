@@ -61,8 +61,9 @@ const Header = ({ activeHeading }) => {
           <div>
             <Link to="/">
               <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-                alt=""
+                src="/images/logo.svg"
+                alt="logo"
+                  className="h-[100px] w-auto"
               />
             </Link>
           </div>
@@ -73,7 +74,7 @@ const Header = ({ activeHeading }) => {
               placeholder="Search for product..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+              className="h-[40px] w-full px-2 border-[#02350a] border-[2px] rounded-md"
             />
             <AiOutlineSearch
               size={30}
@@ -123,7 +124,7 @@ const Header = ({ activeHeading }) => {
       <div
         className={`${
           active == true ? "shadow-sm fixed top-0 left-0 z-10" : null
-        } transition hidden 800px:flex items-center justify-between w-full bg-[#3321c8] h-[70px]`}
+        } transition hidden 800px:flex items-center justify-between w-full bg-[#02350a] h-[70px]`}
       >
         <div
           className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
@@ -289,7 +290,7 @@ const Header = ({ activeHeading }) => {
               <input
                 type="search"
                 placeholder="Search for products"
-                className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+                className="h-[40px] w-full px-2 border-[#02350a] border-[2px] rounded-md"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />

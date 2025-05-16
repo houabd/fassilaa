@@ -6,29 +6,35 @@ const CountDown = ({ data }) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
+
+    return () => clearInterval(timer);
+  }, [data.Finish_Date]); // Ajout des dépendances
+
+  useEffect(() => {
     if (
-      typeof timeLeft.days === "undefined" &&
-      typeof timeLeft.hours === "undefined" &&
-      typeof timeLeft.minutes === "undefined" &&
-      typeof timeLeft.seconds === "undefined"
+      timeLeft.days === 0 &&
+      timeLeft.hours === 0 &&
+      timeLeft.minutes === 0 &&
+      timeLeft.seconds === 0
     ) {
-      axios.delete(`${server}/event/delete-shop-event/${data._id}`);
+      axios.delete(`${server}/event/delete-shop-event/${data._id}`)
+        .catch(error => {
+          console.error("Error deleting event:", error);
+        });
     }
-    return () => clearInterval(timeLeft);
-  });
+  }, [timeLeft, data._id]);
 
   function calculateTimeLeft() {
-    // today date + 3 days
-    const evDate = new Date(
-      new Date().getTime() + 3 * 24 * 60 * 60 * 1000
-    ).toLocaleDateString();
-
-    // const difference = +new Date(evDate) - +new Date();
     const difference = +new Date(data.Finish_Date) - +new Date();
-    let timeLeft = {};
+    let timeLeft = {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0
+    };
 
     if (difference > 0) {
       timeLeft = {
@@ -42,12 +48,12 @@ const CountDown = ({ data }) => {
   }
 
   const timerComponents = Object.keys(timeLeft).map((interval) => {
-    if (!timeLeft[interval]) {
+    if (timeLeft[interval] <= 0) {
       return null;
     }
 
     return (
-      <span className="text-[25px] text-[#475ad2]">
+      <span key={interval} className="text-[25px] text-[#475ad2]">
         {timeLeft[interval]} {interval}{" "}
       </span>
     );
@@ -55,7 +61,7 @@ const CountDown = ({ data }) => {
 
   return (
     <div>
-      {timerComponents.length ? (
+      {timerComponents.some(comp => comp !== null) ? (
         timerComponents
       ) : (
         <span className="text-[red] text-[25px]">Time's Up</span>
